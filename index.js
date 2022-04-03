@@ -265,6 +265,7 @@ if (process.argv.indexOf("-build") > -1) {
 } else {
   app.use(cors());
   app.use(router.routes());
+  app.use(koaStatic(`${COMPILED}`, { maxage: 0 }));
   if (CONFIG.local_editor === true) {
     const editor_files = `node_modules/@wishyoulization/iridium-monaco/dist`;
     const editor_files_alternate = `${__dirname}/${editor_files}`;
@@ -283,7 +284,6 @@ if (process.argv.indexOf("-build") > -1) {
       );
     }
   }
-  app.use(koaStatic(`${COMPILED}`, { maxage: 0 }));
   app.listen(PORT);
 
   console.log(`\nIridium Dev Server Started http://localhost:${PORT}`);

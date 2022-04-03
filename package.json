@@ -1,6 +1,6 @@
 {
   "name": "@wishyoulization/iridium-dev-server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Local dev server for working with Observable notebooks.",
   "main": "index.js",
   "bin": "index.js",
@@ -11,6 +11,9 @@
     "type": "git",
     "url": "https://github.com/wishyoulization/iridium-dev-server.git"
   },
+  "keywords": [
+    "notebook"
+  ],
   "author": "wishyoulization",
   "license": "MIT",
   "dependencies": {
