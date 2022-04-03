@@ -1,0 +1,27 @@
+{
+  "name": "@wishyoulization/iridium-dev-server",
+  "version": "0.0.1",
+  "description": "Local dev server for working with Observable notebooks.",
+  "main": "index.js",
+  "bin": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wishyoulization/iridium-dev-server.git"
+  },
+  "author": "wishyoulization",
+  "license": "MIT",
+  "dependencies": {
+    "@alex.garcia/unofficial-observablehq-compiler": "^0.6.0-alpha.9",
+    "@koa/cors": "^3.1.0",
+    "@observablehq/parser": "^4.4.1",
+    "@wishyoulization/iridium-monaco": "^0.0.3",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-router": "^10.0.0",
+    "koa-static": "^5.0.0",
+    "rcfile": "^1.0.3"
+  }
+}
