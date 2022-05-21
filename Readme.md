@@ -40,7 +40,7 @@ Add to your npm `package.json` scripts for convenience.
 
 ```json
 "scripts": {
-    "start":"npx @wishyoulization/iridium-dev-server",
-    "build":"npx @wishyoulization/iridium-dev-server -build"
+    "start":"iridium-dev-server",
+    "build":"iridium-dev-server -build"
   }
 ```

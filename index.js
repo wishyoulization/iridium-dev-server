@@ -240,7 +240,7 @@ const cell_array_to_ojs = (cells) => {
       try {
         const parsed_cell = parser.parseCell(d.sourceCode);
         return `${d.pin ? "/*PIN*/" : ""}
-${parsed_cell.body.raw || d.sourceCode};`;
+${d.sourceCode};`;
       } catch (e) {
         return `${d.pin ? "/*PIN*/" : ""}
 {
@@ -286,5 +286,5 @@ if (process.argv.indexOf("-build") > -1) {
   }
   app.listen(PORT);
 
-  console.log(`\nIridium Dev Server Started http://localhost:${PORT}`);
+  console.log(`\nDev Server Started http://localhost:${PORT}`);
 }
