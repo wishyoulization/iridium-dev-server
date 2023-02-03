@@ -18,6 +18,7 @@ const HEAD = CONFIG.head || ``;
 const PORT = CONFIG.port || 8080;
 const NOTEBOOKS = CONFIG.notebooks || `${BASE}`;
 const COMPILED = CONFIG.compiled || `${BASE}`;
+const STATIC = CONFIG.static;
 const EDITOR_BASE =
   CONFIG.local_editor === true
     ? "."
@@ -266,6 +267,12 @@ if (process.argv.indexOf("-build") > -1) {
   app.use(cors());
   app.use(router.routes());
   app.use(koaStatic(`${COMPILED}`, { maxage: 0 }));
+
+  if (STATIC && fs.existsSync(STATIC)) {
+    //SERVE OPTIONAL ADDITIONAL STATIC FILES
+    app.use(koaStatic(STATIC, { maxage: 0 }));
+  }
+
   if (CONFIG.local_editor === true) {
     const editor_files = `node_modules/@wishyoulization/iridium-monaco/dist`;
     const editor_files_alternate = `${__dirname}/${editor_files}`;

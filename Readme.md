@@ -23,6 +23,7 @@ Save `.iridiumrc` file in the application root directory to configure the dev se
 {
   "notebooks": "./src",
   "compiled": "./dist",
+  "static:": "/path-to-serve-additional-static-assets",
   "port": 8080,
   "local_editor": false,
   "head": "<style>body{font-family:'Trebuchet MS';}</style>"

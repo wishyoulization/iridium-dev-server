@@ -1,6 +1,6 @@
 {
   "name": "@wishyoulization/iridium-dev-server",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Local dev server for working with Observable notebooks.",
   "main": "index.js",
   "bin": "index.js",
