@@ -3,9 +3,12 @@
   "version": "1.1.0",
   "description": "Local dev server for working with Observable notebooks.",
   "main": "index.js",
-  "bin": "index.js",
+  "bin": {
+    "iridium-dev-server": "index.js"
+  },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "node index.js -build"
   },
   "repository": {
     "type": "git",
@@ -16,15 +19,28 @@
   ],
   "author": "wishyoulization",
   "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
   "dependencies": {
-    "@alex.garcia/unofficial-observablehq-compiler": "^0.6.0-alpha.9",
-    "@koa/cors": "^3.1.0",
-    "@observablehq/parser": "^4.4.1",
-    "@wishyoulization/iridium-monaco": "^0.0.3",
-    "koa": "^2.13.1",
-    "koa-bodyparser": "^4.3.0",
-    "koa-router": "^10.0.0",
+    "@koa/bodyparser": "^6.1.0",
+    "@koa/cors": "^5.0.0",
+    "@koa/router": "^15.7.1",
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "@observablehq/notebook-kit": "^2.11.0",
+    "@observablehq/parser": "^6.1.0",
+    "@wishyoulization/iridium": "github:wishyoulization/iridium#535ca98",
+    "acorn": "^8.19.0",
+    "jsdom": "^31.0.1",
+    "koa": "^3.3.0",
     "koa-static": "^5.0.0",
-    "rcfile": "^1.0.3"
-  }
+    "ws": "^8.23.0",
+    "zod": "^4.6.7"
+  },
+  "files": [
+    "index.js",
+    "lib",
+    "skill"
+  ]
 }
