@@ -37,7 +37,9 @@ Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:80
 
 Every tab showing a notebook connects to the server (a green dot in its favicon, like the macOS traffic light; grey when offline), so an AI assistant can work on the notebook in that tab while you watch.
 
-The server includes an [MCP](https://modelcontextprotocol.io) server, so assistants such as Claude can build and edit notebooks with you: they add and edit cells in the tab you're watching, and read each cell's live output (value, rendered text, errors) to check their work. Tools: `create_notebook`, `open_notebook`, `list_notebooks`, `read_notebook`, `add_cell`, `add_cells`, `edit_cell`, `delete_cell`, `move_cell`, `run_cell`, `evaluate`, `save_notebook`.
+The server includes an [MCP](https://modelcontextprotocol.io) server, so assistants such as Claude can build and edit notebooks with you: they add and edit cells in the tab you're watching, and read each cell's live output (value, rendered text, errors) to check their work. Tools: `create_notebook`, `open_notebook`, `list_notebooks`, `read_notebook`, `add_cell`, `add_cells`, `edit_cell`, `delete_cell`, `move_cell`, `run_cell`, `evaluate`, `screenshot_cells`, `save_notebook`.
+
+`screenshot_cells` returns PNGs of cells as your tab shows them. The tab captures itself with Chrome's tab capture (`getDisplayMedia` on the current tab), scrolling each cell into view and cropping to it. The first time, the tab asks you to allow it: click **Allow tab capture**, then share the tab. Capture stays on until you stop sharing in Chrome's bar.
 
 Set it up once for Claude Code, then ask any new chat for "an Iridium notebook that…":
 
