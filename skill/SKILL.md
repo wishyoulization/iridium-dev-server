@@ -79,6 +79,8 @@ const rows = csvParse(await (await fetch(url)).text());
 display(Inputs.table(rows));
 ```
 
+**Pick one mode per notebook and never mix them.** A notebook is either all Observable JavaScript (`name = expr`, `viewof`, `mutable`, `md\`…\``) or all plain JavaScript (`const`, `display()`, `npm:` imports). Before adding cells to an existing notebook, read it and match the mode its cells already use. Mixing modes breaks when the notebook is copied to observablehq.com: a cell created in the other mode fails (e.g. `SyntaxError: Assignment to external variable 'x'` when a `name = …` cell lands in plain-JavaScript mode), and on Observable each such cell's mode then has to be fixed by hand.
+
 **Built-ins**: `d3`, `Plot`, `Inputs` (range, select, radio, checkbox, text, table, search, button, toggle, date, color, file), `htl`, `_` (lodash), `md`, `html`, `svg`, `tex`, `dot`, `mermaid`, `DuckDBClient` (SQL: `db = DuckDBClient.of({sales: data})`, then `db.sql\`SELECT …\``), `FileAttachment`, `width`, `now`, `invalidation`, `Generators`, `Promises`, `DOM`, `require` (AMD libraries), sample datasets (`penguins`, `cars`, `aapl`, …). Other libraries: `import("npm:package")` / `import {x} from "npm:package"` in plain JavaScript cells, or `require("package@version")`.
 
 ## Good notebooks
