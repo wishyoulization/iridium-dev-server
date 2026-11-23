@@ -2,7 +2,7 @@
 
 Local dev server for working with Observable notebooks: edit them in [Iridium](https://github.com/wishyoulization/iridium), save them as files, and compile them to ES modules you can embed in any app.
 
-> Published on npm as `@a10k/iridium-dev-server` from 2.0.0 (previously `@wishyoulization/iridium-dev-server`, 1.1.0 and earlier).
+> Published on npm as `@a10k/iridium-dev-server` (previously `@wishyoulization/iridium-dev-server`).
 
 Cells are compiled by Observable's own engine, [Notebook Kit](https://observablehq.com/notebook-kit/kit): classic Observable JavaScript (`viewof`, `mutable`, `import {x} from "@user/notebook"`, `require(…)`) and plain JavaScript cells (several statements, `const` declarations, `npm:` imports, `display(…)`), as in Observable Notebooks 2.0.
 
