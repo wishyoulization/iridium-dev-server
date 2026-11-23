@@ -1,6 +1,6 @@
 {
   "name": "@a10k/iridium-dev-server",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Local dev server for working with Observable notebooks.",
   "main": "index.js",
   "bin": {
@@ -24,7 +24,7 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@a10k/iridium": "~0.0.2",
+    "@a10k/iridium": "~0.0.3",
     "@koa/bodyparser": "^6.1.0",
     "@koa/cors": "^5.0.0",
     "@koa/router": "^15.7.1",
