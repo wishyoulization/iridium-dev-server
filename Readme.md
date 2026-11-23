@@ -63,6 +63,8 @@ import { points } from "./my-data.js"
 
 Paths resolve against the page (the server root), so `./my-data.js` is the compiled `my-data` notebook. Save the imported notebook first so its module is up to date. Names without a path (`@d3/color-legend`, or a notebook id) still load from observablehq.com, and full URLs are imported as written.
 
+Other relative URLs in cells and in the `head` option (`fetch("./data.json")`, `<img src="./libs/logo.svg">`, `<link href="./libs/index.css">`) also resolve against the server root, so files in the `static` or `compiled` folders work with `./` paths. `FileAttachment("x")` reads from the notebook's own files folder (`<notebooks>/<name>/`).
+
 ## Notebook list API
 
 `GET /api/notebooks?q=&page=1&per_page=25&sort=name|modified` returns the notebooks whose name or title contains `q` (any case), one page at a time. For example, with `my-notebook` and `my-data` saved, `GET /api/notebooks?q=my` returns:
