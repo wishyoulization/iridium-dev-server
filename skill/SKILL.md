@@ -71,7 +71,7 @@ import {Legend} from "@d3/color-legend"           // reuse cells from notebooks 
 
 Rules: one cell per name; cells can reference each other in any order; a cell is an expression, `name = expression`, or a `{ … return … }` block. Use `viewof name = Inputs.*(…)` for controls (the cell's value is the input's value). `this` is the cell's previous value.
 
-**Plain JavaScript cells** also work (as in Observable Notebooks 2.0): several statements, top-level `const`/`let`/`function` shared with other cells, `import {x} from "npm:package"`, and `display(value)` to show output.
+**Plain JavaScript cells** also work (as in Observable Notebooks 2.0): several statements, top-level `const`/`let`/`function` shared with other cells, `import {x} from "npm:package"`, and `display(value)` to show output. These cells may also use TypeScript syntax (`const n: number = 1`, `interface P { x: number }`); types are stripped, not checked.
 
 ```js
 import {csvParse} from "npm:d3-dsv";

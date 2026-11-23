@@ -4,7 +4,7 @@ Local dev server for working with Observable notebooks: edit them in [Iridium](h
 
 > Published on npm as `@a10k/iridium-dev-server` (previously `@wishyoulization/iridium-dev-server`).
 
-Cells are compiled by Observable's own engine, [Notebook Kit](https://observablehq.com/notebook-kit/kit): classic Observable JavaScript (`viewof`, `mutable`, `import {x} from "@user/notebook"`, `require(…)`) and plain JavaScript cells (several statements, `const` declarations, `npm:` imports, `display(…)`), as in Observable Notebooks 2.0.
+Cells are compiled by Observable's own engine, [Notebook Kit](https://observablehq.com/notebook-kit/kit): classic Observable JavaScript (`viewof`, `mutable`, `import {x} from "@user/notebook"`, `require(…)`) and plain JavaScript cells (several statements, `const` declarations, `npm:` imports, `display(…)`), as in Observable Notebooks 2.0. Plain JavaScript cells may use TypeScript syntax (type annotations, interfaces): the types are removed and the cell runs as plain JavaScript, without type checking.
 
 It also includes an [MCP](https://modelcontextprotocol.io) server and a skill, so AI assistants such as Claude can build notebooks with you, live, in the tab you're watching.
 
@@ -175,7 +175,7 @@ Notebooks are saved in Notebook Kit's HTML format (`<name>.html`), the open form
 </notebook>
 ```
 
-- Classic Observable JavaScript cells are stored as `application/vnd.observable.javascript`, plain JavaScript cells as `module`. Pinned cells (editor visible) have `pinned`.
+- Classic Observable JavaScript cells are stored as `application/vnd.observable.javascript`, plain JavaScript cells as `module`, TypeScript cells as `text/x-typescript` (Observable Desktop's `ts` mode). Pinned cells (editor visible) have `pinned`.
 - Markdown, HTML, TeX and Graphviz cells from Observable Desktop open as the equivalent `md`/`html`/`tex`/`dot` template and are saved back in their own mode. Other modes (SQL, Python, …) can't run in Iridium but are kept unchanged.
 - **Legacy `.ojs` notebooks** are still read. The first save writes `<name>.html` next to it; from then on the `.html` file is used. The `.ojs` file is left untouched, so delete it once you're happy with the conversion.
 
@@ -196,7 +196,7 @@ runtime.module(define, Inspector.into(document.body));
 
 - Works with `@observablehq/runtime` 5.9+ (runtime 5 includes the standard library and `fileAttachments`, so `new Runtime()` is enough) and 6 as above.
 - Every named cell is passed to `observer(name)`, so you can pick cells to render by name.
-- Plain JavaScript cells: each `display(…)` call in a run goes to its own observer; top-level declarations are named variables.
+- Plain JavaScript and TypeScript cells: each `display(…)` call in a run goes to its own observer; top-level declarations are named variables.
 - Built-ins specific to Notebook Kit (such as the sample datasets like `penguins`) aren't in `@observablehq/stdlib`; provide them yourself if an embedded notebook uses them.
 
 ## Configuration
