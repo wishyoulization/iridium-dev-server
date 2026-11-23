@@ -2,6 +2,8 @@
 
 Local dev server for working with Observable notebooks: edit them in [Iridium](https://github.com/wishyoulization/iridium), save them as files, and compile them to ES modules you can embed in any app.
 
+> Published on npm as `@a10k/iridium-dev-server` from 2.0.0 (previously `@wishyoulization/iridium-dev-server`, 1.1.0 and earlier).
+
 Cells are compiled by Observable's own engine, [Notebook Kit](https://observablehq.com/notebook-kit/kit): classic Observable JavaScript (`viewof`, `mutable`, `import {x} from "@user/notebook"`, `require(…)`) and plain JavaScript cells (several statements, `const` declarations, `npm:` imports, `display(…)`), as in Observable Notebooks 2.0.
 
 It also includes an [MCP](https://modelcontextprotocol.io) server and a skill, so AI assistants such as Claude can build notebooks with you, live, in the tab you're watching.
@@ -14,7 +16,7 @@ Start a server in any folder (notebooks are saved there as `<name>.html`):
 
 ```bash
 mkdir my-notebooks && cd my-notebooks
-npx @wishyoulization/iridium-dev-server
+npx @a10k/iridium-dev-server
 ```
 
 Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:8080/my-notebook for any other (it's created on first save). Write a cell, run it with Shift+Enter, save with ⌘S / Ctrl+S.
@@ -42,19 +44,19 @@ To build notebooks with Claude instead, see [Live collaboration and AI assistant
 Run it with `npx` as above, or add it to a project:
 
 ```bash
-npm i -D @wishyoulization/iridium-dev-server
+npm i -D @a10k/iridium-dev-server
 ```
 
 or install it globally to get the `iridium-dev-server` command everywhere:
 
 ```bash
-npm i -g @wishyoulization/iridium-dev-server
+npm i -g @a10k/iridium-dev-server
 ```
 
 ## Run the development server
 
 ```bash
-npx @wishyoulization/iridium-dev-server
+npx @a10k/iridium-dev-server
 ```
 
 Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:8080/my-notebook for any other. Running a cell (Shift+Enter) or saving (the save button or ⌘S) writes the notebook file and its compiled module.
@@ -85,20 +87,20 @@ The server includes an [MCP](https://modelcontextprotocol.io) server, so assista
 Once, from any folder:
 
 ```bash
-claude mcp add --scope user iridium -- npx -y @wishyoulization/iridium-dev-server mcp
+claude mcp add --scope user iridium -- npx -y @a10k/iridium-dev-server mcp
 ```
 
 Then install the skill (it teaches Claude the workflow and how to write good cells):
 
 ```bash
-npm i -g @wishyoulization/iridium-dev-server
+npm i -g @a10k/iridium-dev-server
 ```
 
 ```bash
-mkdir -p ~/.claude/skills && cp -r "$(npm root -g)/@wishyoulization/iridium-dev-server/skill" ~/.claude/skills/iridium-notebooks
+mkdir -p ~/.claude/skills && cp -r "$(npm root -g)/@a10k/iridium-dev-server/skill" ~/.claude/skills/iridium-notebooks
 ```
 
-(If you installed it in a project instead, copy `node_modules/@wishyoulization/iridium-dev-server/skill`.) Check the connection with `claude mcp list`, then start a new chat.
+(If you installed it in a project instead, copy `node_modules/@a10k/iridium-dev-server/skill`.) Check the connection with `claude mcp list`, then start a new chat.
 
 ### Set up Claude Desktop and other MCP clients
 
@@ -109,7 +111,7 @@ Add the server to the client's MCP config (for Claude Desktop: Settings → Deve
   "mcpServers": {
     "iridium": {
       "command": "npx",
-      "args": ["-y", "@wishyoulization/iridium-dev-server", "mcp"]
+      "args": ["-y", "@a10k/iridium-dev-server", "mcp"]
     }
   }
 }
@@ -143,7 +145,7 @@ The notebook opens in your browser and fills in as the assistant works; edit cel
 `-build` (or `--build`) compiles every notebook to an ES module without starting the server:
 
 ```bash
-npx @wishyoulization/iridium-dev-server -build
+npx @a10k/iridium-dev-server -build
 ```
 
 ## Notebook files

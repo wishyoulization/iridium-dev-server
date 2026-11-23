@@ -1,5 +1,5 @@
 {
-  "name": "@wishyoulization/iridium-dev-server",
+  "name": "@a10k/iridium-dev-server",
   "version": "2.0.0",
   "description": "Local dev server for working with Observable notebooks.",
   "main": "index.js",
@@ -17,7 +17,7 @@
   "keywords": [
     "notebook"
   ],
-  "author": "wishyoulization",
+  "author": "a10k",
   "license": "MIT",
   "type": "module",
   "engines": {
@@ -30,7 +30,7 @@
     "@modelcontextprotocol/sdk": "^1.32.2",
     "@observablehq/notebook-kit": "^2.11.0",
     "@observablehq/parser": "^6.1.0",
-    "@wishyoulization/iridium": "^0.1.0",
+    "@a10k/iridium": "^0.1.0",
     "acorn": "^8.19.0",
     "jsdom": "^31.0.1",
     "koa": "^3.3.0",
