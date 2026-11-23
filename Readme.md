@@ -19,7 +19,7 @@ mkdir my-notebooks && cd my-notebooks
 npx @a10k/iridium-dev-server
 ```
 
-Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:8080/my-notebook for any other (it's created on first save). Write a cell, run it with Shift+Enter, save with ⌘S / Ctrl+S.
+Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:8080/my-notebook for any other (it's created on first save). Write a cell, run it with Shift+Enter, save with ⌘S / Ctrl+S. Running or saving writes the notebook file and its compiled module (`<name>.js`).
 
 Try these cells, one per cell:
 
@@ -53,21 +53,28 @@ or install it globally to get the `iridium-dev-server` command everywhere:
 npm i -g @a10k/iridium-dev-server
 ```
 
-## Run the development server
+## Importing other notebooks
 
-```bash
-npx @a10k/iridium-dev-server
+Every saved notebook is also compiled to `<name>.js` next to it, so one notebook can import cells from another with a path starting `./`, `../` or `/`:
+
+```js
+import { points } from "./my-data.js"
 ```
 
-Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:8080/my-notebook for any other. Running a cell (Shift+Enter) or saving (the save button or ⌘S) writes the notebook file and its compiled module.
+Paths resolve against the page (the server root), so `./my-data.js` is the compiled `my-data` notebook. Save the imported notebook first so its module is up to date. Names without a path (`@d3/color-legend`, or a notebook id) still load from observablehq.com, and full URLs are imported as written.
 
 ## Notebook list API
 
-`GET /api/notebooks?q=&page=1&per_page=25&sort=name|modified` returns the notebooks whose name or title contains `q` (any case), one page at a time:
+`GET /api/notebooks?q=&page=1&per_page=25&sort=name|modified` returns the notebooks whose name or title contains `q` (any case), one page at a time. For example, with `my-notebook` and `my-data` saved, `GET /api/notebooks?q=my` returns:
 
 ```json
-{ "q": "zdog", "sort": "name", "page": 1, "per_page": 25, "pages": 1, "total": 2,
-  "items": [{ "name": "cubrt-with-zdog", "title": "Cubrt with Zdog", "url": "/cubrt-with-zdog", "modified": "2026-11-21T…Z", "cells": 12, "size": 5480 }] }
+{
+  "q": "my", "sort": "name", "page": 1, "per_page": 25, "pages": 1, "total": 2,
+  "items": [
+    { "name": "my-data", "title": "my-data", "url": "/my-data", "modified": "2026-11-21T10:00:00.000Z", "cells": 3, "size": 812 },
+    { "name": "my-notebook", "title": "my-notebook", "url": "/my-notebook", "modified": "2026-11-21T10:05:00.000Z", "cells": 5, "size": 1240 }
+  ]
+}
 ```
 
 `DELETE /api/notebooks/<name>` moves a notebook and its attachments folder to the Trash (macOS's, restorable with Put Back; elsewhere a `.trash` folder in the notebooks folder) and removes its compiled module.
