@@ -11,12 +11,28 @@ If the `iridium` tools (`create_notebook`, `add_cell`, …) aren't available, te
 
 ## Workflow
 
-1. **Start**: `create_notebook` with a short kebab-case `name`, a `title`, and the first cells (a `md` heading and intro, then the data). It opens the notebook in the user's browser. For an existing notebook use `list_notebooks` and `open_notebook`.
-   - In an app with a built-in browser (e.g. the Claude desktop app), pass `open: false` and open the returned `url` in that browser so the notebook sits next to the chat.
+1. **Start**: `create_notebook` with a short kebab-case `name`, a `title`, and the first cells (a `md` heading and intro, then the data). It opens the notebook in the user's default browser. For an existing notebook use `list_notebooks` and `open_notebook`.
+   - If the user names a browser ("on my Chrome"), pass `browser` (e.g. `"Google Chrome"`, `"Safari"`, `"Firefox"`): no browser extension or shell command needed.
+   - In an app with a built-in browser (e.g. the Claude desktop app), unless the user asked for another browser, pass `open: false` and open the returned `url` in that browser so the notebook sits next to the chat.
 2. **Build incrementally**: `add_cell` / `add_cells`, a few cells at a time, small and focused: load data, shape it, chart it, add controls. Each call returns the cells' live output once they have run.
-3. **Check every result**: read `status`, `value`, `text` and `error`, and `other_failing_cells`. Fix errors before moving on; never leave the notebook broken. Use `evaluate` to inspect values (`data.length`, `Object.keys(data[0])`, `data.slice(0, 3)`) without adding cells.
-4. **Edit, don't append duplicates**: change a cell with `edit_cell` (by its `id`); remove one with `delete_cell`. A name may be defined by only one cell.
+3. **Check every result**: read `status`, `value`, `text` and `error`, and `other_failing_cells`. Fix errors before moving on; never leave the notebook broken.
+   - To check how a chart, layout or styling *looks*, call `screenshot_cells` (by `cells` names or `ids`). It returns PNGs of the cells exactly as the user's tab shows them. Use it instead of driving a browser or taking screen screenshots. The first call in a tab asks the user to allow tab capture (a bar in the tab, then Chrome's share dialog), so say so when you make it. Use `evaluate` to inspect values (`data.length`, `Object.keys(data[0])`, `data.slice(0, 3)`) without adding cells.
+4. **Edit, don't append duplicates**: change a cell with `edit_cell`; remove one with `delete_cell`. Address cells by `id` or by the name they define (`cell: "data"`). A name may be defined by only one cell.
+   - For a small change to a long cell, patch it: `edit_cell` with `replace: [{old, new}]` (each `old` must appear exactly once). Don't resend the whole cell to add a line.
 5. **Finish**: unpin cells whose code the reader needn't see (`edit_cell` with `pinned: false`, e.g. prose and finished charts), and tell the user what the notebook does and how to use it.
+
+## Saving
+
+You work on the notebook in the user's open tab, exactly as they would. Your edits are unsaved until saved, like theirs: results report `unsaved_changes`, and the tab shows it.
+- Call `save_notebook` (the tab's own Save) only when the user asks you to save.
+- When you finish with unsaved changes, say so briefly.
+- Every tool except `list_notebooks` and `create_notebook` needs the notebook open in a tab. If one isn't, call `open_notebook`.
+
+## Working efficiently
+
+- `read_notebook` with `brief: true` lists every cell in one line (id, name, status, first line of code). Use it to find cells; read full code only for the cells you'll change (`ids: [...]`).
+- Edit results don't echo your code back. They return status, value and errors only.
+- Notebooks that hold records the user adds to over time (a log, a tracker) work best with data in small data-only cells (e.g. one per week or month) and all calculations and views in separate cells. Then each update is one `replace` patch to one small cell.
 
 ## Collaborating
 
@@ -62,6 +78,8 @@ import {csvParse} from "npm:d3-dsv";
 const rows = csvParse(await (await fetch(url)).text());
 display(Inputs.table(rows));
 ```
+
+**Pick one mode per notebook and never mix them.** A notebook is either all Observable JavaScript (`name = expr`, `viewof`, `mutable`, `md\`…\``) or all plain JavaScript (`const`, `display()`, `npm:` imports). Before adding cells to an existing notebook, read it and match the mode its cells already use. Mixing modes breaks when the notebook is copied to observablehq.com: a cell created in the other mode fails (e.g. `SyntaxError: Assignment to external variable 'x'` when a `name = …` cell lands in plain-JavaScript mode), and on Observable each such cell's mode then has to be fixed by hand.
 
 **Built-ins**: `d3`, `Plot`, `Inputs` (range, select, radio, checkbox, text, table, search, button, toggle, date, color, file), `htl`, `_` (lodash), `md`, `html`, `svg`, `tex`, `dot`, `mermaid`, `DuckDBClient` (SQL: `db = DuckDBClient.of({sales: data})`, then `db.sql\`SELECT …\``), `FileAttachment`, `width`, `now`, `invalidation`, `Generators`, `Promises`, `DOM`, `require` (AMD libraries), sample datasets (`penguins`, `cars`, `aapl`, …). Other libraries: `import("npm:package")` / `import {x} from "npm:package"` in plain JavaScript cells, or `require("package@version")`.
 
