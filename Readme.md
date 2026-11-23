@@ -4,12 +4,51 @@ Local dev server for working with Observable notebooks: edit them in [Iridium](h
 
 Cells are compiled by Observable's own engine, [Notebook Kit](https://observablehq.com/notebook-kit/kit): classic Observable JavaScript (`viewof`, `mutable`, `import {x} from "@user/notebook"`, `require(…)`) and plain JavaScript cells (several statements, `const` declarations, `npm:` imports, `display(…)`), as in Observable Notebooks 2.0.
 
+It also includes an [MCP](https://modelcontextprotocol.io) server and a skill, so AI assistants such as Claude can build notebooks with you, live, in the tab you're watching.
+
 Requires Node.js 22 or later.
+
+## Quick start
+
+Start a server in any folder (notebooks are saved there as `<name>.html`):
+
+```bash
+mkdir my-notebooks && cd my-notebooks
+npx @wishyoulization/iridium-dev-server
+```
+
+Open http://localhost:8080/ to edit the `index` notebook, or http://localhost:8080/my-notebook for any other (it's created on first save). Write a cell, run it with Shift+Enter, save with ⌘S / Ctrl+S.
+
+Try these cells, one per cell:
+
+```js
+viewof n = Inputs.range([1, 100], { value: 20, step: 1, label: "Points" })
+```
+
+```js
+points = d3.range(n).map((i) => ({ x: i, y: Math.sin(i / 3) }))
+```
+
+```js
+Plot.lineY(points, { x: "x", y: "y" }).plot({ width })
+```
+
+Drag the slider and the chart follows: cells re-run when the values they use change.
+
+To build notebooks with Claude instead, see [Live collaboration and AI assistants](#live-collaboration-and-ai-assistants-mcp).
 
 ## Install
 
+Run it with `npx` as above, or add it to a project:
+
 ```bash
-npm i @wishyoulization/iridium-dev-server
+npm i -D @wishyoulization/iridium-dev-server
+```
+
+or install it globally to get the `iridium-dev-server` command everywhere:
+
+```bash
+npm i -g @wishyoulization/iridium-dev-server
 ```
 
 ## Run the development server
@@ -41,12 +80,56 @@ The server includes an [MCP](https://modelcontextprotocol.io) server, so assista
 
 `screenshot_cells` returns PNGs of cells as your tab shows them. The tab captures itself with Chrome's tab capture (`getDisplayMedia` on the current tab), scrolling each cell into view and cropping to it. The first time, the tab asks you to allow it: click **Allow tab capture**, then share the tab. Capture stays on until you stop sharing in Chrome's bar.
 
-Set it up once for Claude Code, then ask any new chat for "an Iridium notebook that…":
+### Set up Claude Code
+
+Once, from any folder:
 
 ```bash
-claude mcp add --scope user iridium -- npx @wishyoulization/iridium-dev-server mcp
-mkdir -p ~/.claude/skills && cp -r node_modules/@wishyoulization/iridium-dev-server/skill ~/.claude/skills/iridium-notebooks
+claude mcp add --scope user iridium -- npx -y @wishyoulization/iridium-dev-server mcp
 ```
+
+Then install the skill (it teaches Claude the workflow and how to write good cells):
+
+```bash
+npm i -g @wishyoulization/iridium-dev-server
+```
+
+```bash
+mkdir -p ~/.claude/skills && cp -r "$(npm root -g)/@wishyoulization/iridium-dev-server/skill" ~/.claude/skills/iridium-notebooks
+```
+
+(If you installed it in a project instead, copy `node_modules/@wishyoulization/iridium-dev-server/skill`.) Check the connection with `claude mcp list`, then start a new chat.
+
+### Set up Claude Desktop and other MCP clients
+
+Add the server to the client's MCP config (for Claude Desktop: Settings → Developer → Edit Config, `claude_desktop_config.json`), then restart it:
+
+```json
+{
+  "mcpServers": {
+    "iridium": {
+      "command": "npx",
+      "args": ["-y", "@wishyoulization/iridium-dev-server", "mcp"]
+    }
+  }
+}
+```
+
+The same `command`/`args` work in Cursor, VS Code and other clients that launch stdio MCP servers. In clients that take skills, add the `skill` folder as a skill; elsewhere, the MCP server's own instructions are enough to get started.
+
+### Example prompts
+
+Ask in a new chat:
+
+- "Make an Iridium notebook exploring a random walk: a slider for the number of steps, a line chart, and summary stats."
+- "Create an Iridium notebook that loads this CSV URL, shows it as a table, and charts the second column over time."
+- "Open my `sales` notebook and add a monthly revenue chart under the data cell."
+- "Take a screenshot of the chart cell and tighten its margins."
+- "Open it in Google Chrome." / "Save the notebook."
+
+The notebook opens in your browser and fills in as the assistant works; edit cells yourself at any time and it sees your changes.
+
+### How it works
 
 - `iridium-dev-server mcp` speaks MCP over stdio. It serves the current folder's notebooks if it has an `.iridiumrc`, otherwise `~/Documents/Iridium` (or `IRIDIUM_HOME`), created on first use with port 8090. If a dev server is already running there, it connects to it, so every chat reaches the same open tabs; otherwise it starts one.
 - A running dev server also serves MCP over HTTP at `/mcp` (e.g. `claude mcp add --transport http iridium http://localhost:8080/mcp`).
